@@ -3,6 +3,18 @@
 #define BUZZER P1_5
 bit buzz = 0;
 
+void Delay_ms(int interval)
+{
+	int i,j;
+	for(i=0;i<1000;i++)
+	{
+		for(j=0;j<interval;j++);
+	}
+}
+
+unsigned char code durations[] = {5,5,15,5,5,15,5,5,5,5,15,5,5,15,5,5,5,10,5,5,5,7,5,5,10,10};
+
+unsigned char delays[] = {50,50,50,50,50,50,50,50,50,50,500,50,50,50,50,50,50,1000,50,50,50,50,0,50,50,50};
 unsigned char code notes[] = {
 	0xF9, 0x1E,
 	0xF9, 0xDF,
@@ -16,7 +28,37 @@ unsigned char code notes[] = {
 	0xFD, 0x45,
 	0xFD, 0x6C};
 
-unsigned char TH0_val = 0, TL0_val = 0, duration = 20, elapsed = 0;
+unsigned char code music[] = {
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFB, 0x68,
+	0xF9, 0x1E,
+	0xF9, 0xDF,
+	0xFA, 0x8A,
+
+	0xFA, 0xD8,
+	0xFA, 0xD8,
+	0xFA, 0xD8,
+	0xFA, 0xD8,
+	0xFA, 0xD8,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xFA, 0x8A,
+	0xF9, 0xDF,
+	0xF9, 0xDF,
+    0xFA, 0x8A,
+	0xF9, 0xDF,
+	0xFB, 0x68,
+};
+
+unsigned char TH0_val = 0, TL0_val = 0, duration = 10, elapsed = 0;
 unsigned char curNote = 0;
 unsigned char uart_data;
 
@@ -48,8 +90,12 @@ void InitTimers()
 void main(void)
 {
 	P0 = 0;					//turn off the 7-seg LEDs
-	TH0_val = notes[2*curNote];
-	TL0_val = notes[2*curNote+1];
+	//TH0_val = notes[2*curNote];
+	//TL0_val = notes[2*curNote+1];
+
+	TH0_val = music[2*curNote];
+	TL0_val = music[2*curNote+1];
+	duration = durations[curNote];
 	InitTimers();
 	while(1)
 	{
@@ -73,13 +119,15 @@ void Timer1() interrupt 3
 	elapsed++;
 	if (elapsed == duration)
 	{
+		Delay_ms(delays[curNote]/20);
 		elapsed = 0;
 		
 		curNote++;
-		if (curNote > 10) curNote = 0;
+		if (curNote > 25) curNote = 0;
 		
-		TH0_val = notes[2*curNote];
-		TL0_val = notes[2*curNote+1];
+		TH0_val = music[2*curNote];
+		TL0_val = music[2*curNote+1];
+		duration = durations[curNote];
 	}
 }
 
