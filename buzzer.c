@@ -12,7 +12,7 @@ void Delay_ms(int interval)
 	}
 }
 
-unsigned char code durations[] = {5,5,15,5,5,15,5,5,5,5,15,5,5,15,5,5,5,10,5,5,5,7,5,5,10,10};
+unsigned char code durations[] = {5,5,10,5,5,10,5,5,5,5,15,5,5,10,5,2,5,7,5,5,5,5,5,5,10,10};
 
 unsigned char delays[] = {50,50,50,50,50,50,50,50,50,50,500,50,50,50,50,50,50,1000,50,50,50,50,0,50,50,50};
 unsigned char code notes[] = {
