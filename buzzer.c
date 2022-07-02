@@ -4,15 +4,17 @@
 bit buzz = 0;
 
 unsigned char code notes[] = {
-	0xF9, 0x1F,
+	0xF9, 0x1E,
 	0xF9, 0xDF,
 	0xFA, 0x8A,
 	0xFA, 0xD8,
 	0xFB, 0x68,
 	0xFB, 0xE9,
-	0xFC, 0x23,
 	0xFC, 0x5B,
-	0xFC, 0x8F};
+	0xFC, 0x8F,
+	0xFC, 0xEF,
+	0xFD, 0x45,
+	0xFD, 0x6C};
 
 unsigned char TH0_val = 0, TL0_val = 0, duration = 20, elapsed = 0;
 unsigned char curNote = 0;
@@ -61,6 +63,7 @@ void Timer0() interrupt 1
 	TL0 = TL0_val;
 	buzz = ~buzz;
 	BUZZER = buzz;
+	
 }
 
 void Timer1() interrupt 3
@@ -73,7 +76,7 @@ void Timer1() interrupt 3
 		elapsed = 0;
 		
 		curNote++;
-		if (curNote > 2) curNote = 0;
+		if (curNote > 10) curNote = 0;
 		
 		TH0_val = notes[2*curNote];
 		TL0_val = notes[2*curNote+1];
